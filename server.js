@@ -1,19 +1,21 @@
-var express = require('express')
-var app = express()
+var express = require('express');
+var app = express();
+
+app.set('port', (process.env.PORT || 5000));
 
 app.get('/', function (req, res){
-	res.send("bella")
-})
+	res.send('bella');
+});
 
 app.get('/update', function (req, res) {
-  res.send('UPDATE');
-})
+	res.send('UPDATE');
+});
 
-var server = app.listen(3000, function () {
+var server = app.listen(app.get('port'), function () {
 	
-	var host = server.address().address
-	var port = server.address().port
+	var host = server.address().address;
+	var port = server.address().port;
 
-	console.log('Connector listening at http://%s:%s', host, port)
+	console.log('Connector listening at http://%s:%s', host, port);
 
-})
+});
