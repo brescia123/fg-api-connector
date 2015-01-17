@@ -4,7 +4,7 @@ var app = express();
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/', function (req, res){
-	res.send('bella');
+	res.send.satus(200).('bella');
 });
 
 app.get('/update', function (req, res) {
