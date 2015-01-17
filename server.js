@@ -7,7 +7,7 @@ app.get('/', function (req, res){
 	res.send('bella');
 });
 
-app.get('/update', function (req, res) {
+app.post('/update', function (req, res) {
 	res.send('UPDATE');
 });
 
