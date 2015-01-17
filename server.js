@@ -5,6 +5,10 @@ app.get('/', function (req, res){
 	res.send("bella")
 })
 
+app.get('/update', function (req, res) {
+  res.send('UPDATE');
+})
+
 var server = app.listen(3000, function () {
 	
 	var host = server.address().address
