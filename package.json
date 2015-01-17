@@ -1,0 +1,14 @@
+{
+  "name": "fanta-genius-api-connector",
+  "version": "0.0.1",
+  "description": "A nodejs \"connector\" between the Kimono web crawler and the Firebase fanta-genius APIs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "bear",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.11.0"
+  }
+}
