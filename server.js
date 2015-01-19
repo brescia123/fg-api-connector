@@ -1,15 +1,28 @@
 var express = require('express');
 var FirebaseClient = require('firebase-client');
 var request = require("request");
+var config = require("config");
 
+// Config
+var urls = config.get('urls');
+var apikey = config.get('apikey');
+
+// Create Expressjs app
 var app = express();
+
+// Setup Firebase
 var firebase = new FirebaseClient({
-	url: "https://votes-test1.firebaseio.com/"
+	url: "https://votes-test1.firebaseio.com/api"
 });
 
+// Setting port
 app.set('port', (process.env.PORT || 5000));
 
+/*
+ENDPOINTS
+*/
 
+// Default
 app.get('/', function(req, res) {
 	firebase.get()
 		.then(function(body) {
@@ -19,19 +32,68 @@ app.get('/', function(req, res) {
 
 // Endpoint to update Firebase from Kimono APIs
 app.post('/update', function(req, res) {
-	request("https://www.kimonolabs.com/api/a1hzzn7c?apikey=WQpWv313F2Pf5BmndKN6w2J3h4jiVCa7",
-		function(err, response, body) {
-			data = prepare_data(body);
-			firebase.update('api', data)
-						.then(function(body) {
-							res.status(200).end();				
-						})
-						.fail(function(err) {
-							res.status(500).end();									
-						});
-		});
+	console.log("Update started...")
+
+	var error = false;
+	var k_goal_keepers, k_defenders, k_midfielders, k_strickers;
+
+	/*
+	Make request to all four APIs (goal_keepers, defenders, midfielders, strickers) to 
+	to activate Kimono crawler
+	*/
+	request(urls.kimono_base + urls.goal_keepers + "?apikey=" + apikey, 
+	function(err, response, body) {
+		if(err) console.log("Error retrieving goal_keepers from Kimono");
+		k_goal_keepers = JSON.parse(body);;
+		console.log("goal_keepers on Kimono updated");
+		if (!error) {
+			firebase
+				.set('goal_keepers', k_goal_keepers)
+				.then(function(body) {
+					console.log("Firebase updated!")
+					res.status(200).end();				
+				})
+				.fail(function(err) {
+					console.log("Firebase error")
+					res.status(500).end();									
+				});
+	}
+		res.status(200).end();
+	});
+	// request("https://www.kimonolabs.com/api/e1be6rac?apikey=WQpWv313F2Pf5BmndKN6w2J3h4jiVCa7", 
+	// function(err, response, body) {
+	//   console.log("goal_keepers on Kimono updated");
+	// });
+	// request("https://www.kimonolabs.com/api/e1be6rac?apikey=WQpWv313F2Pf5BmndKN6w2J3h4jiVCa7", 
+	// function(err, response, body) {
+	//   console.log("goal_keepers on Kimono updated");
+	// });
+	// request("https://www.kimonolabs.com/api/e1be6rac?apikey=WQpWv313F2Pf5BmndKN6w2J3h4jiVCa7", 
+	// function(err, response, body) {
+	//   console.log("goal_keepers on Kimono updated");
+	// });
+
+	// request("https://www.kimonolabs.com/api/a1hzzn7c?apikey=WQpWv313F2Pf5BmndKN6w2J3h4jiVCa7",
+	// function(err, response, body) {
+	// 	if (err) console.log("Kimono error");
+	// 	data = prepare_data(body);
+	// 	console.log("Kimono crawl ended.\nUpdating Firebase...");
+	// 	firebase.update('api', data)
+	// 				.then(function(body) {
+	// 					console.log("Firebase updated!")
+	// 					res.status(200).end();				
+	// 				})
+	// 				.fail(function(err) {
+	// 					console.log("Firebase error")
+	// 					res.status(500).end();									
+	// 				});
+	// });
+
+	// TODO: Unify all the apis
 });
 
+
+// Starting server
 var server = app.listen(app.get('port'), function() {
 
 	var host = server.address().address;
@@ -40,6 +102,11 @@ var server = app.listen(app.get('port'), function() {
 	console.log('Connector listening at http://%s:%s', host, port);
 
 });
+
+
+/*
+Helper Methods
+*/
 
 // Do the adjustments to the date and prepare them to store in Firebase
 var prepare_data = function (body) {
