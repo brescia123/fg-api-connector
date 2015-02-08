@@ -1,3 +1,3 @@
-# Fanta Genius API Connector
+# Fanta Genius API Proxy
 
-A nodejs "connector" between the Kimono web crawler and the Firebase fanta-genius APIs
+A nodejs server used as a proxy between the Kimono web crawler and the Firebase fanta-genius APIs
