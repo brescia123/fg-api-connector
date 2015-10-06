@@ -8,9 +8,9 @@ var request = require('request');
 var config = require('config');
 var Kimono = require('./modules/kimono.js');
 kimono = new Kimono(request, config);
+
 // Config
 var urls = config.get('urls');
-var apikey = config.get('apikey');
 
 // Setup Firebase
 var firebase = new FirebaseClient({
@@ -60,20 +60,20 @@ var prepare_data = function (body) {
 			case 'strickers':
 				role = 'S';
 				break;
-		};
+		}
 		// Replace "api" key with "role"
-		data_array[i]['role'] = role;
-		delete data_array[i]['api'];
+		data_array[i].role = role;
+		delete data_array[i].api;
 
 		//Replace team values
 		var team = data_array[i].team;
 		team = team.toLowerCase();
 		data_array[i].team = team.substring(0, team.length - 1);
-	};
+	}
 
 	data = {
 		'players' : data_array
 	};
 
 	return data;
-}
+};
