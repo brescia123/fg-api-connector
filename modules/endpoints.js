@@ -1,4 +1,5 @@
-module.exports = (function(app, kimono, firebase, config, utils) {
+module.exports = (function(app, kimono, fgApi, config, utils) {
+
   app.get('/', function(req, res) {
     res.send(config);
   });
@@ -23,8 +24,15 @@ module.exports = (function(app, kimono, firebase, config, utils) {
       } else {
         res.status(200).end();
         console.log('Posting %s to Firebase...', api_name);
-        firebase.set(api_name, JSON.parse(response));
+        fgApi.child(api_name).set(JSON.parse(response));
       }
     }
+
+    console.log('Posting APIs info to Firebase...');
+    fgApi.child(utils.const.firebase.INFO).set(
+      {
+        last_update: (new Date()).toGMTString()
+      }
+    );
   });
 });
