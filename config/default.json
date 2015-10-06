@@ -1,6 +1,9 @@
 {
+  "debug": true,
   "urls": {
+    "firebase_base": "https://fanta-genius.firebaseio.com/api",
     "kimono_base": "https://www.kimonolabs.com/api/",
-    "g_players": "2el7djzy"
+    "g_players": "2el7djzy",
+    "g_votes": "2nygy02o"
   }
 }
