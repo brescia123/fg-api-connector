@@ -1,5 +1,5 @@
 {
-  "name": "fanta-genius-api-connector",
+  "name": "fg-api-connector",
   "version": "0.0.1",
   "description": "A nodejs \"connector\" between the Kimono web crawler and the Firebase fanta-genius APIs",
   "main": "server.js",

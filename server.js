@@ -23,7 +23,7 @@ require('./modules/endpoints.js')(app, kimono, fgApi, config, utils);
 app.set('port', (process.env.PORT || 5000));
 
 // Start server
-var server = app.listen(app.get('port'), 'localhost', function() {
+var server = app.listen(app.get('port'), function() {
 
 	var host = server.address().address;
 	var port = server.address().port;
