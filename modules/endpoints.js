@@ -28,13 +28,25 @@ module.exports = (function(app, kimono, fgApi, config, utils) {
       } else {
         res.status(200).end();
         console.log('Posting %s to Firebase...', api_name);
-        fgApi.child(api_name).set(JSON.parse(response));
+        fgApi.child(api_name).set(JSON.parse(response), onComplete);
       }
     }
 
+    function onComplete(error) {
+      if (error) {
+        console.log('Firebase sync error: ' + error);
+      } else {
+        console.log('Firebase sync succeeded');
+      }
+    };
+
     console.log('Posting APIs info to Firebase...');
+    var now = new Date();
+    //Converting date to Italy timezone
+    var itaNowMills = now.getTime() + (120 * 60000);
+    var itaNow = new Date(itaNowMills);
     fgApi.child(utils.const.firebase.INFO).set({
-      last_update: (new Date()).toGMTString()
+      last_update: itaNow.toGMTString()
     });
   });
 });
