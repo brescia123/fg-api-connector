@@ -1,7 +1,11 @@
 module.exports = (function(app, kimono, fgApi, config, utils) {
 
   app.get('/', function(req, res) {
-    res.send(config);
+    if (config.debug) {
+      res.send(config);
+    } else {
+      res.status(501).end();
+    }
   });
   app.post('/update', function(req, res) {
     console.log('Update started...');
@@ -29,10 +33,8 @@ module.exports = (function(app, kimono, fgApi, config, utils) {
     }
 
     console.log('Posting APIs info to Firebase...');
-    fgApi.child(utils.const.firebase.INFO).set(
-      {
-        last_update: (new Date()).toGMTString()
-      }
-    );
+    fgApi.child(utils.const.firebase.INFO).set({
+      last_update: (new Date()).toGMTString()
+    });
   });
 });
